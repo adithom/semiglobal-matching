@@ -1,16 +1,30 @@
 <launch>
-  <!-- Node to run the semiglobal-matching package -->
+  <arg name="left_image_topic" default="/camera/left/image_rect" />
+  <arg name="right_image_topic" default="/camera/right/image_rect" />
+  <arg name="left_camera_info_topic" default="/camera/left/camera_info" />
+  <arg name="right_camera_info_topic" default="/camera/right/camera_info" />
+  <arg name="disparity_topic" default="/sgm_gpu/disparity" />
+  <arg name="p1" default="10" />
+  <arg name="p2" default="120" />
+  <arg name="check_consistency" default="true" />
+
+    <!-- Node to run the semiglobal-matching package -->
   <node pkg="semiglobal-matching" type="sgm_gpu_node" name="sgm_gpu_node" output="screen">
     <!-- Set topic names -->
-    <param name="left_image_topic" value="/camera/left/image_rect" />
-    <param name="right_image_topic" value="/camera/right/image_rect" />
-    <param name="left_camera_info_topic" value="/camera/left/camera_info" />
-    <param name="right_camera_info_topic" value="/camera/right/camera_info" />
-    <param name="disparity_topic" value="/sgm_gpu/disparity" />
+    <remap from="/camera/left/image_rect" to="/input/left/image" />
+    <remap from="/camera/right/image_rect" to="/input/right/image" />
+    <remap from="/camera/left/camera_info" to="/input/left/camera_info" />
+    <remap from="/camera/right/camera_info" to="/input/right/camera_info" />
 
-    <!-- GPU-specific settings (example) -->
-    <param name="p1" value="10" />
-    <param name="p2" value="120" />
-    <param name="check_consistency" value="true" />
+    <param name="left_image_topic" value="$(arg left_image_topic)" />
+    <param name="right_image_topic" value="$(arg right_image_topic)" />
+    <param name="left_camera_info_topic" value="$(arg left_camera_info_topic)" />
+    <param name="right_camera_info_topic" value="$(arg right_camera_info_topic)" />
+    <param name="disparity_topic" value="$(arg disparity_topic)" />
+
+    <!-- GPU-specific settings -->
+    <param name="p1" value="$(arg p1)" />
+    <param name="p2" value="$(arg p2)" />
+    <param name="check_consistency" value="$(arg check_consistency)" />
   </node>
 </launch>

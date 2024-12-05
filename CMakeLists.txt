@@ -36,3 +36,17 @@ target_link_libraries(sgm_gpu_lib ${OpenCV_LIBS} ${CUDA_LIBRARIES})
 
 add_executable(sgm_gpu_node src/sgm_gpu_node.cpp src/sgm_gpu_node_main.cpp)
 target_link_libraries(sgm_gpu_node sgm_gpu_lib ${catkin_LIBRARIES} ${OpenCV_LIBS})
+
+add_dependencies(sgm_gpu_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+install(TARGETS sgm_gpu_lib sgm_gpu_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
+install(DIRECTORY launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
