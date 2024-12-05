@@ -1,0 +1,16 @@
+<launch>
+  <!-- Node to run the semiglobal-matching package -->
+  <node pkg="semiglobal-matching" type="sgm_gpu_node" name="sgm_gpu_node" output="screen">
+    <!-- Set topic names -->
+    <param name="left_image_topic" value="/camera/left/image_rect" />
+    <param name="right_image_topic" value="/camera/right/image_rect" />
+    <param name="left_camera_info_topic" value="/camera/left/camera_info" />
+    <param name="right_camera_info_topic" value="/camera/right/camera_info" />
+    <param name="disparity_topic" value="/sgm_gpu/disparity" />
+
+    <!-- GPU-specific settings (example) -->
+    <param name="p1" value="10" />
+    <param name="p2" value="120" />
+    <param name="check_consistency" value="true" />
+  </node>
+</launch>

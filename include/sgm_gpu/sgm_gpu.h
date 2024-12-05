@@ -20,7 +20,7 @@ class SgmGpu {
    *
    * See SGM paper.
    */
-  uint8_t p1_, p2_;
+  int p1_, p2_;
   /**
    * @brief Enable/disable left-right consistency check
    */
