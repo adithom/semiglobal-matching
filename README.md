@@ -1,8 +1,8 @@
-##  Semi-Global Matching for Depth Estimation
+#  Semi-Global Matching for Depth Estimation
 
 Semi-Global Matching (SGM) is an algorithm used in computer vision to calculate depth information from two images taken by cameras that slightly offset (stereo vision). This project implements a GPU accelerated version of the algorithm and creates a ROS wrapper for use with ROS enabled control systems.
 
-#### Package Structure
+### Package Structure
 ```
 semiglobal-matching/
 ├─ CMakeLists.txt
@@ -30,9 +30,9 @@ semiglobal-matching/
    └─ sgm_gpu_node_main.cpp
 ```
 
-#### Usage Instructions
+### Usage Instructions
 
-1. Depends on ROS Foxy and CUDA. Additionally:
+1. Depends on Linux, ROS Foxy and CUDA. Additionally:
 ```
 sudo apt-get update
 sudo apt-get install -y ros-foxy-roscpp ros-foxy-sensor-msgs ros-foxy-stereo-msgs ros-foxy-image-transport ros-foxy-cv-bridge ros-foxy-image-view
@@ -57,9 +57,9 @@ source devel/setup.bash
 roslaunch semiglobal-matching semiglobal_matching.launch left_image_topic:=/my_cam/left/image_rect right_image_topic:=/my_cam/right/image_rect 
 ```
 
-##### Sample Run
+#### Sample Run
 
-You need raw rectified images 
+You need raw rectified images or access to a stereo camera
 ```
 still working on this lmao
 ```
