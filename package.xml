@@ -1,0 +1,13 @@
+<package format="2">
+  <name>semiglobal-matching</name>
+  <version>0.1.0</version>
+  <description>ROS wrapper for GPU-accelerated semi-global matching.</description>
+  <maintainer email="adithtom2004@gmail.com">Adith Tom Alex</maintainer>
+  <license>GPL v3</license>
+
+  <depend>roscpp</depend>
+  <depend>image_transport</depend>
+  <depend>cv_bridge</depend>
+  <depend>stereo_msgs</depend>
+  <depend>sensor_msgs</depend>
+</package>
