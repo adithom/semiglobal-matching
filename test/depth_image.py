@@ -1,21 +1,20 @@
-import rclpy
-from rclpy.node import Node
+#!/usr/bin/env python
+
+import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
 
-class DisparitySaver(Node):
+class DisparitySaver:
     def __init__(self):
-        super().__init__('disparity_saver')
+        # Initialize the ROS node
+        rospy.init_node('disparity_saver', anonymous=True)
+
+        # Create a subscriber to the disparity topic
         self.bridge = CvBridge()
-        self.subscription = self.create_subscription(
-            Image,
-            '/sgm_gpu/disparity',
-            self.listener_callback,
-            10
-        )
-        self.processed = False  # To track if we've already processed an image
+        self.processed = False  # To process only one image
+        self.subscriber = rospy.Subscriber('/sgm_gpu/disparity', Image, self.listener_callback)
 
     def listener_callback(self, msg):
         if not self.processed:
@@ -30,25 +29,22 @@ class DisparitySaver(Node):
 
                 # Save the image as a PNG file
                 cv2.imwrite('disparity_colored.png', colored_disparity)
-                self.get_logger().info('Disparity map saved as disparity_colored.png')
+                rospy.loginfo('Disparity map saved as disparity_colored.png')
 
                 # Optionally, display the image
-                #cv2.imshow("Disparity Map", colored_disparity)
-                #cv2.waitKey(1)
+                # cv2.imshow("Disparity Map", colored_disparity)
+                # cv2.waitKey(1)
 
-                # Mark as processed and unsubscribe
+                # Mark as processed and unregister the subscriber
                 self.processed = True
-                self.subscription.destroy()
-                self.get_logger().info('Unsubscribed after processing one image.')
+                self.subscriber.unregister()
+                rospy.loginfo('Unsubscribed after processing one image.')
             except Exception as e:
-                self.get_logger().error(f'Failed to process image: {e}')
-
-def main(args=None):
-    rclpy.init(args=args)
-    node = DisparitySaver()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+                rospy.logerr(f'Failed to process image: {e}')
 
 if __name__ == '__main__':
-    main()
+    try:
+        node = DisparitySaver()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass

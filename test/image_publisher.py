@@ -1,31 +1,47 @@
-import rclpy
-from rclpy.node import Node
+#!/usr/bin/env python
+
+import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-class StereoImagePublisher(Node):
+class StereoImagePublisher:
     def __init__(self, left_image_path, right_image_path):
-        super().__init__('stereo_image_publisher')
-        self.left_pub = self.create_publisher(Image, '/camera/left/image_rect', 10)
-        self.right_pub = self.create_publisher(Image, '/camera/right/image_rect', 10)
-        self.timer = self.create_timer(0.1, self.timer_callback)  # Publish at 10 Hz
+        # Initialize the ROS node
+        rospy.init_node('stereo_image_publisher', anonymous=True)
+
+        # Create publishers for left and right images
+        self.left_pub = rospy.Publisher('/camera/left/image_rect', Image, queue_size=10)
+        self.right_pub = rospy.Publisher('/camera/right/image_rect', Image, queue_size=10)
+
+        # Load images using OpenCV
         self.bridge = CvBridge()
         self.left_image = cv2.imread(left_image_path, cv2.IMREAD_COLOR)
         self.right_image = cv2.imread(right_image_path, cv2.IMREAD_COLOR)
 
-    def timer_callback(self):
-        left_msg = self.bridge.cv2_to_imgmsg(self.left_image, encoding='bgr8')
-        right_msg = self.bridge.cv2_to_imgmsg(self.right_image, encoding='bgr8')
-        self.left_pub.publish(left_msg)
-        self.right_pub.publish(right_msg)
+        # Publish images at 10 Hz
+        self.rate = rospy.Rate(10)
 
-def main(args=None):
-    rclpy.init(args=args)
-    node = StereoImagePublisher('rectified_left.png', 'rectified_right.png')
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    def publish_images(self):
+        while not rospy.is_shutdown():
+            # Convert OpenCV images to ROS Image messages
+            left_msg = self.bridge.cv2_to_imgmsg(self.left_image, encoding='bgr8')
+            right_msg = self.bridge.cv2_to_imgmsg(self.right_image, encoding='bgr8')
+
+            # Publish the messages
+            self.left_pub.publish(left_msg)
+            self.right_pub.publish(right_msg)
+
+            self.rate.sleep()
 
 if __name__ == '__main__':
-    main()
+    try:
+        # Provide paths to the rectified images
+        left_image_path = 'rectified_left.png'
+        right_image_path = 'rectified_right.png'
+
+        # Create and run the publisher
+        node = StereoImagePublisher(left_image_path, right_image_path)
+        node.publish_images()
+    except rospy.ROSInterruptException:
+        pass

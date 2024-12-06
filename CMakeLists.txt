@@ -1,24 +1,22 @@
-cmake_minimum_required(VERSION 3.5)
-project(semiglobal_matching)
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  image_transport
+  cv_bridge
+  stereo_msgs
+  sensor_msgs
+  # and any other ROS 1 packages
+)
 
-# Find dependencies
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(image_transport REQUIRED)
-find_package(cv_bridge REQUIRED)
-find_package(stereo_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(OpenCV REQUIRED)
-find_package(CUDA REQUIRED)
+catkin_package()
 
 include_directories(
   include
+  ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   ${CUDA_INCLUDE_DIRS}
 )
 
-# Compile GPU code
-cuda_add_library(sgm_gpu_lib
+add_library(sgm_gpu_lib
   src/costs.cu
   src/hamming_cost.cu
   src/left_right_consistency.cu
@@ -28,27 +26,24 @@ cuda_add_library(sgm_gpu_lib
 target_link_libraries(sgm_gpu_lib ${OpenCV_LIBS} ${CUDA_LIBRARIES})
 
 add_executable(sgm_gpu_node src/sgm_gpu_node.cpp src/sgm_gpu_node_main.cpp)
-target_link_libraries(sgm_gpu_node sgm_gpu_lib ${OpenCV_LIBS} ${CUDA_LIBRARIES})
+target_link_libraries(sgm_gpu_node sgm_gpu_lib ${OpenCV_LIBS} ${CUDA_LIBRARIES} ${catkin_LIBRARIES})
 
-# Link against ROS 2 packages
-ament_target_dependencies(sgm_gpu_node rclcpp image_transport cv_bridge stereo_msgs sensor_msgs)
-
-install(TARGETS sgm_gpu_lib sgm_gpu_node
-  DESTINATION lib/${PROJECT_NAME}
+install(TARGETS sgm_gpu_node sgm_gpu_lib
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
 
 install(DIRECTORY include/
-  DESTINATION include/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
 install(PROGRAMS
   scripts/image_publisher.py
   scripts/depth_image.py
-  DESTINATION lib/${PROJECT_NAME}
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 install(DIRECTORY launch/
-  DESTINATION share/${PROJECT_NAME}/launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
-
-ament_package()
