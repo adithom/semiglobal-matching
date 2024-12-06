@@ -7,8 +7,8 @@ import cv2
 class StereoImagePublisher(Node):
     def __init__(self, left_image_path, right_image_path):
         super().__init__('stereo_image_publisher')
-        self.left_pub = self.create_publisher(Image, '/my_cam/left/image_rect', 10)
-        self.right_pub = self.create_publisher(Image, '/my_cam/right/image_rect', 10)
+        self.left_pub = self.create_publisher(Image, '/camera/left/image_rect', 10)
+        self.right_pub = self.create_publisher(Image, '/camera/right/image_rect', 10)
         self.timer = self.create_timer(0.1, self.timer_callback)  # Publish at 10 Hz
         self.bridge = CvBridge()
         self.left_image = cv2.imread(left_image_path, cv2.IMREAD_COLOR)

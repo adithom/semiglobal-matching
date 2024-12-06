@@ -53,6 +53,8 @@ cd ~/ros2_ws/src
 3. Clone the repo
 ```
 git clone https://github.com/adithom/semiglobal-matching.git
+chmod +x test/image_publisher.py
+chmod +x test/depth_image.py
 cd ~/ros2_ws
 colcon build
 source install/setup.bash
@@ -68,5 +70,6 @@ ros2 launch semiglobal-matching semiglobal_matching_launch.py left_image_topic:=
 
 You need raw rectified images or access to a stereo camera
 ```
+
 ros2 run image_tools showimage --ros-args --remap image:=/sgm_gpu/disparity
 ```

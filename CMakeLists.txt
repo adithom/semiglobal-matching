@@ -41,7 +41,12 @@ install(DIRECTORY include/
   DESTINATION include/
 )
 
-# If you have a ROS 2 style launch directory and files
+install(PROGRAMS
+  scripts/image_publisher.py
+  scripts/depth_image.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(DIRECTORY launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
