@@ -1,4 +1,4 @@
-#include "sgm_gpu_node.h"
+#include "sgm_gpu/sgm_gpu_node.h"
 #include <ros/ros.h>
 
 int main(int argc, char** argv)

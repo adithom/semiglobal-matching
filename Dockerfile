@@ -1,13 +1,20 @@
 FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y curl gnupg2 lsb-release
 RUN curl -sSL http://packages.ros.org/ros.key | apt-key add -
 RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+
+RUN apt-get update && apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+
 
 RUN apt-get update && apt-get install -y ros-noetic-ros-core \
   ros-noetic-roscpp \
   ros-noetic-sensor-msgs \
   ros-noetic-stereo-msgs \
+  ros-noetic-message-filters \
   ros-noetic-image-transport \
   ros-noetic-cv-bridge \
   ros-noetic-image-view \
