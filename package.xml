@@ -1,13 +1,22 @@
-<package format="2">
-  <name>semiglobal-matching</name>
-  <version>0.1.0</version>
-  <description>ROS wrapper for GPU-accelerated semi-global matching.</description>
+<?xml version="1.0"?>
+<package format="3">
+  <name>semiglobal_matching</name>
+  <version>0.2.0</version>
+  <description>ROS 2 wrapper for GPU-accelerated semi-global matching.</description>
   <maintainer email="adithtom2004@gmail.com">Adith Tom Alex</maintainer>
   <license>GPL v3</license>
 
-  <depend>roscpp</depend>
+  <!-- Build tools -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Build and exec depends -->
+  <depend>rclcpp</depend>
   <depend>image_transport</depend>
   <depend>cv_bridge</depend>
   <depend>stereo_msgs</depend>
   <depend>sensor_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

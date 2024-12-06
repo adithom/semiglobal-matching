@@ -34,6 +34,11 @@ semiglobal-matching/
 
 1. Depends on Linux, ROS Foxy and CUDA. Additionally:
 ```
+source /opt/ros/foxy/setup.bash
+echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+```
 sudo apt-get update
 sudo apt-get install -y ros-foxy-roscpp ros-foxy-sensor-msgs ros-foxy-stereo-msgs ros-foxy-image-transport ros-foxy-cv-bridge ros-foxy-image-view
 sudo apt-get install -y build-essential cmake git
@@ -42,24 +47,26 @@ sudo apt-get install -y libopencv-dev
 
 2. Create a catkin workspace
 ```
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
 ```
 3. Clone the repo
 ```
 git clone https://github.com/adithom/semiglobal-matching.git
-cd ~/catkin_ws
-catkin_make
-source devel/setup.bash
+cd ~/ros2_ws
+colcon build
+source install/setup.bash
+echo "source ~/ros2_ws/install/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 ```
 4. Run the launch file
 ```
-roslaunch semiglobal-matching semiglobal_matching.launch left_image_topic:=/my_cam/left/image_rect right_image_topic:=/my_cam/right/image_rect 
+ros2 launch semiglobal-matching semiglobal_matching_launch.py left_image_topic:=/my_cam/left/image_rect right_image_topic:=/my_cam/right/image_rect 
 ```
 
 #### Sample Run
 
 You need raw rectified images or access to a stereo camera
 ```
-still working on this lmao
+ros2 run image_tools showimage --ros-args --remap image:=/sgm_gpu/disparity
 ```
